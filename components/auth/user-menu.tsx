@@ -37,7 +37,7 @@ export function UserMenu({ user }: UserMenuProps) {
     <>
       <SidebarMenuItem>
         <div className="flex h-8 min-w-0 items-center gap-2">
-          <span className="ml-[8px] mb-[3px] flex size-4 shrink-0 items-center justify-center">
+          <span className="ml-2 mb-0.75 flex size-4 shrink-0 items-center justify-center">
             <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-sidebar-accent text-[10px] font-medium text-sidebar-accent-foreground">
               {initial}
             </span>
@@ -53,7 +53,7 @@ export function UserMenu({ user }: UserMenuProps) {
           tooltip="Sign out"
           disabled={pending}
           onClick={signOut}
-          className="ml-[2px] border border-destructive/50 bg-[color-mix(in_oklch,var(--destructive)_12%,var(--background))] text-destructive hover:bg-[color-mix(in_oklch,var(--destructive)_20%,var(--background))] hover:text-destructive active:bg-[color-mix(in_oklch,var(--destructive)_24%,var(--background))] active:text-destructive"
+          className="ml-0.5 border border-destructive/50 bg-[color-mix(in_oklch,var(--destructive)_12%,var(--background))] text-destructive hover:bg-[color-mix(in_oklch,var(--destructive)_20%,var(--background))] hover:text-destructive active:bg-[color-mix(in_oklch,var(--destructive)_24%,var(--background))] active:text-destructive"
         >
           <LogOutIcon aria-hidden="true" />
           <span>{pending ? "Signing out..." : "Sign out"}</span>
