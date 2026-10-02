@@ -1,4 +1,5 @@
 import { KeyboardShortcutsDialog } from "@/components/keyboard-shortcuts-dialog"
+import { ThemeToggle } from "@/components/theme-toggle"
 import {
   Sidebar,
   SidebarContent,
@@ -78,6 +79,7 @@ export function AppSidebar() {
         <SidebarFooter>
           <SidebarMenu>
             <KeyboardShortcutsDialog />
+            <ThemeToggle />
           </SidebarMenu>
         </SidebarFooter>
     </Sidebar>
