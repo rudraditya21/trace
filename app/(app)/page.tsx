@@ -1,6 +1,7 @@
 import { PageDescription } from "@/components/page/description"
 import { PageTitle } from "@/components/page/title"
 import { NewProjectDialog } from "@/components/projects/new-project-dialog"
+import { ShareProjectDialog } from "@/components/projects/share-project-dialog"
 import { Button } from "@/components/ui/button"
 import {
   Tabs,
@@ -18,7 +19,16 @@ export default async function Home() {
   const session = await requireSession()
 
   const projects = await prisma.project.findMany({
-    where: { ownerId: session.user.id },
+    where: {
+      OR: [
+        { ownerId: session.user.id },
+        {
+          members: {
+            some: { userId: session.user.id },
+          },
+        },
+      ],
+    },
     orderBy: { createdAt: "desc" },
   })
   const yourProjects = projects.filter(
@@ -52,7 +62,7 @@ export default async function Home() {
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {yourProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+                <ProjectCard key={project.id} project={project} canShare />
               ))}
             </div>
           )}
@@ -65,7 +75,11 @@ export default async function Home() {
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {sharedProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  canShare={project.ownerId === session.user.id}
+                />
               ))}
             </div>
           )}
@@ -82,9 +96,10 @@ type ProjectCardProps = {
     description: string | null
     visibility: "PRIVATE" | "SHARED"
   }
+  canShare?: boolean
 }
 
-function ProjectCard({ project }: ProjectCardProps) {
+function ProjectCard({ project, canShare = false }: ProjectCardProps) {
   return (
     <article className="grid min-h-32 content-between gap-4 rounded-xl border bg-card p-4 text-card-foreground">
       <div className="grid gap-2">
@@ -100,10 +115,18 @@ function ProjectCard({ project }: ProjectCardProps) {
           {project.description || "No description"}
         </p>
       </div>
-      <Button type="button" size="sm" className="w-full">
-        Open project
-        <ArrowRightIcon data-icon="inline-end" aria-hidden="true" />
-      </Button>
+      <div className="flex gap-2">
+        {canShare && (
+          <ShareProjectDialog
+            projectId={project.id}
+            projectName={project.name}
+          />
+        )}
+        <Button type="button" size="sm" className="flex-1">
+          Open project
+          <ArrowRightIcon data-icon="inline-end" aria-hidden="true" />
+        </Button>
+      </div>
     </article>
   )
 }

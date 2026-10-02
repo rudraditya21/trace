@@ -12,15 +12,28 @@ enum ProjectVisibility {
   SHARED
 }
 
+enum ProjectMemberRole {
+  EDITOR
+  VIEWER
+}
+
+enum ProjectInvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
 model Project {
-  id          String            @id @default(uuid()) @db.Uuid
-  name        String            @db.VarChar(120)
-  description String?           @db.Text
-  visibility  ProjectVisibility @default(PRIVATE)
+  id          String              @id @default(uuid()) @db.Uuid
+  name        String              @db.VarChar(120)
+  description String?             @db.Text
+  visibility  ProjectVisibility   @default(PRIVATE)
   ownerId     String
-  owner       User              @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  owner       User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  members     ProjectMember[]
+  invitations ProjectInvitation[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
 
   @@index([visibility])
   @@index([ownerId])
@@ -28,16 +41,19 @@ model Project {
 }
 
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  projects      Project[]
+  id                  String              @id
+  name                String
+  email               String
+  emailVerified       Boolean             @default(false)
+  image               String?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  sessions            Session[]
+  accounts            Account[]
+  projects            Project[]
+  memberships         ProjectMember[]
+  sentInvitations     ProjectInvitation[] @relation("ProjectInvitationSender")
+  receivedInvitations ProjectInvitation[] @relation("ProjectInvitationRecipient")
 
   @@unique([email])
   @@map("user")
@@ -89,4 +105,38 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model ProjectMember {
+  id        String            @id @default(uuid()) @db.Uuid
+  projectId String            @db.Uuid
+  userId    String
+  role      ProjectMemberRole @default(VIEWER)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  project   Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([userId])
+  @@index([projectId])
+}
+
+model ProjectInvitation {
+  id        String                  @id @default(uuid()) @db.Uuid
+  projectId String                  @db.Uuid
+  inviterId String
+  inviteeId String
+  role      ProjectMemberRole       @default(VIEWER)
+  status    ProjectInvitationStatus @default(PENDING)
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
+  project   Project                 @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  inviter   User                    @relation("ProjectInvitationSender", fields: [inviterId], references: [id], onDelete: Cascade)
+  invitee   User                    @relation("ProjectInvitationRecipient", fields: [inviteeId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, inviteeId])
+  @@index([inviteeId, status])
+  @@index([inviterId])
+  @@index([projectId])
 }

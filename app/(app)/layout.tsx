@@ -14,7 +14,16 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
 
   const projects = await prisma.project
     .findMany({
-      where: { ownerId: session.user.id },
+      where: {
+        OR: [
+          { ownerId: session.user.id },
+          {
+            members: {
+              some: { userId: session.user.id },
+            },
+          },
+        ],
+      },
       select: {
         id: true,
         name: true,
