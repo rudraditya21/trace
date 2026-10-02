@@ -1,3 +1,5 @@
+"use client"
+
 import { KeyboardShortcutsDialog } from "@/components/keyboard-shortcuts-dialog"
 import { SearchCommand } from "@/components/search-command"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -20,8 +22,11 @@ import {
   WaypointsIcon,
 } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export function AppSidebar() {
+  const pathname = usePathname()
+
   return (
     <Sidebar collapsible="icon">
         <SidebarHeader>
@@ -41,20 +46,28 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     render={<Link href="/" />}
                     tooltip="Home"
-                    isActive
+                    isActive={pathname === "/"}
                   >
                     <HomeIcon aria-hidden="true" />
                     <span>Home</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton type="button" tooltip="Inbox">
+                  <SidebarMenuButton
+                    render={<Link href="/inbox" />}
+                    tooltip="Inbox"
+                    isActive={pathname === "/inbox"}
+                  >
                     <InboxIcon aria-hidden="true" />
                     <span>Inbox</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton type="button" tooltip="Settings">
+                  <SidebarMenuButton
+                    render={<Link href="/settings" />}
+                    tooltip="Settings"
+                    isActive={pathname === "/settings"}
+                  >
                     <SettingsIcon aria-hidden="true" />
                     <span>Settings</span>
                   </SidebarMenuButton>

@@ -79,11 +79,17 @@ export function SearchCommand() {
                 <HomeIcon aria-hidden="true" />
                 <span>Home</span>
               </CommandItem>
-              <CommandItem value="inbox" onSelect={() => selectItem()}>
+              <CommandItem
+                value="inbox"
+                onSelect={() => selectItem(() => router.push("/inbox"))}
+              >
                 <InboxIcon aria-hidden="true" />
                 <span>Inbox</span>
               </CommandItem>
-              <CommandItem value="settings" onSelect={() => selectItem()}>
+              <CommandItem
+                value="settings"
+                onSelect={() => selectItem(() => router.push("/settings"))}
+              >
                 <SettingsIcon aria-hidden="true" />
                 <span>Settings</span>
               </CommandItem>
