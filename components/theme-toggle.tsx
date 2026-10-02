@@ -8,21 +8,21 @@ import { MoonIcon, SunIcon } from "lucide-react"
 
 const THEME_STORAGE_KEY = "theme"
 
+function toggleDocumentTheme() {
+  const root = document.documentElement
+  const isDark = root.classList.toggle("dark")
+
+  root.style.colorScheme = isDark ? "dark" : "light"
+  localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light")
+}
+
 export function ThemeToggle() {
-  function toggleTheme() {
-    const root = document.documentElement
-    const isDark = root.classList.toggle("dark")
-
-    root.style.colorScheme = isDark ? "dark" : "light"
-    localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light")
-  }
-
   return (
     <SidebarMenuItem>
       <SidebarMenuButton
         type="button"
         tooltip="Toggle theme"
-        onClick={toggleTheme}
+        onClick={toggleDocumentTheme}
       >
         <MoonIcon className="dark:hidden" aria-hidden="true" />
         <SunIcon className="hidden dark:block" aria-hidden="true" />

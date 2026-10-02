@@ -13,6 +13,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import {
+  CommandIcon,
   HomeIcon,
   InboxIcon,
   SearchIcon,
@@ -40,6 +41,11 @@ export function AppSidebar() {
                   <SidebarMenuButton type="button" tooltip="Search">
                     <SearchIcon aria-hidden="true" />
                     <span>Search</span>
+                    <div className="ml-auto flex items-center gap-1 text-xs text-sidebar-foreground/60 group-data-[collapsible=icon]:hidden">
+                      <CommandIcon className="size-3!" aria-hidden="true" />
+                      <span>+</span>
+                      <span>K</span>
+                    </div>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
