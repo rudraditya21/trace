@@ -1,4 +1,5 @@
 import { KeyboardShortcutsDialog } from "@/components/keyboard-shortcuts-dialog"
+import { SearchCommand } from "@/components/search-command"
 import { ThemeToggle } from "@/components/theme-toggle"
 import {
   Sidebar,
@@ -13,10 +14,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import {
-  CommandIcon,
   HomeIcon,
   InboxIcon,
-  SearchIcon,
   SettingsIcon,
   WaypointsIcon,
 } from "lucide-react"
@@ -37,17 +36,7 @@ export function AppSidebar() {
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton type="button" tooltip="Search">
-                    <SearchIcon aria-hidden="true" />
-                    <span>Search</span>
-                    <div className="ml-auto flex items-center gap-1 text-xs text-sidebar-foreground/60 group-data-[collapsible=icon]:hidden">
-                      <CommandIcon className="size-3!" aria-hidden="true" />
-                      <span>+</span>
-                      <span>K</span>
-                    </div>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <SearchCommand />
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     render={<Link href="/" />}
