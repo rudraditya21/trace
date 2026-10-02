@@ -3,13 +3,16 @@ import { PageTitle } from "@/components/page/title"
 import { NewProjectDialog } from "@/components/projects/new-project-dialog"
 import { Button } from "@/components/ui/button"
 import { prisma } from "@/lib/prisma"
+import { requireSession } from "@/lib/session"
 import { ArrowRightIcon } from "lucide-react"
 import { connection } from "next/server"
 
 export default async function Home() {
   await connection()
+  const session = await requireSession()
 
   const projects = await prisma.project.findMany({
+    where: { ownerId: session.user.id },
     orderBy: { createdAt: "desc" },
   })
 

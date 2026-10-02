@@ -5,13 +5,16 @@ import {
 } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { prisma } from "@/lib/prisma"
+import { requireSession } from "@/lib/session"
 import { connection } from "next/server"
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   await connection()
+  const session = await requireSession()
 
   const projects = await prisma.project
     .findMany({
+      where: { ownerId: session.user.id },
       select: {
         id: true,
         name: true,
@@ -26,7 +29,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
 
   return (
     <SidebarProvider>
-      <AppSidebar projects={projects} />
+      <AppSidebar projects={projects} user={session.user} />
       <SidebarInset>
         <SidebarTrigger />
         {children}

@@ -2,6 +2,7 @@
 
 import { KeyboardShortcutsDialog } from "@/components/keyboard-shortcuts-dialog"
 import { NewProjectDialog } from "@/components/projects/new-project-dialog"
+import { UserMenu } from "@/components/auth/user-menu"
 import { SearchCommand } from "@/components/search-command"
 import { ThemeToggle } from "@/components/theme-toggle"
 import {
@@ -28,9 +29,12 @@ type SidebarProject = {
 
 type AppSidebarProps = {
   projects: SidebarProject[]
+  user: {
+    name: string
+  }
 }
 
-export function AppSidebar({ projects }: AppSidebarProps) {
+export function AppSidebar({ projects, user }: AppSidebarProps) {
   const pathname = usePathname()
   const privateProjects = projects.filter(
     (project) => project.visibility === "PRIVATE"
@@ -145,6 +149,7 @@ export function AppSidebar({ projects }: AppSidebarProps) {
         <SidebarMenu>
           <KeyboardShortcutsDialog />
           <ThemeToggle />
+          <UserMenu user={user} />
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>

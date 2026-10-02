@@ -2,6 +2,7 @@
 
 import { ProjectVisibility } from "@/generated/prisma/enums"
 import { prisma } from "@/lib/prisma"
+import { getSession } from "@/lib/session"
 import { revalidatePath } from "next/cache"
 
 export type CreateProjectState = {
@@ -17,6 +18,15 @@ export async function createProject(
   _previousState: CreateProjectState,
   formData: FormData
 ): Promise<CreateProjectState> {
+  const session = await getSession()
+
+  if (!session) {
+    return {
+      success: false,
+      message: "You must be signed in to create a project.",
+    }
+  }
+
   const rawName = formData.get("name")
   const rawDescription = formData.get("description")
   const name = typeof rawName === "string" ? rawName.trim() : ""
@@ -45,6 +55,7 @@ export async function createProject(
         name,
         description: description || null,
         visibility: ProjectVisibility.PRIVATE,
+        ownerId: session.user.id,
       },
     })
 
