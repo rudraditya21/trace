@@ -16,7 +16,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import type { ProjectAccessRole } from "@/lib/project-access"
-import { ArrowLeftIcon, FileTextIcon, WaypointsIcon } from "lucide-react"
+import { ArrowLeftIcon, WaypointsIcon } from "lucide-react"
 import Link from "next/link"
 
 type ProjectSidebarProps = {
@@ -58,20 +58,11 @@ export function ProjectSidebar({ project, role, user }: ProjectSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Project</SidebarGroupLabel>
+          <SidebarGroupLabel>Files</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  render={<Link href={`/projects/${project.id}`} />}
-                  tooltip="Editor"
-                  isActive
-                >
-                  <FileTextIcon aria-hidden="true" />
-                  <span>Editor</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
+            <p className="px-2 text-xs text-sidebar-foreground/50 group-data-[collapsible=icon]:hidden">
+              No files yet.
+            </p>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
