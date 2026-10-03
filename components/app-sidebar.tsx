@@ -100,7 +100,7 @@ export function AppSidebar({ projects, user }: AppSidebarProps) {
                 {privateProjects.map((project) => (
                   <SidebarMenuItem key={project.id}>
                     <SidebarMenuButton
-                      type="button"
+                      render={<Link href={`/projects/${project.id}`} />}
                       size="default"
                       tooltip={project.name}
                     >
@@ -126,7 +126,7 @@ export function AppSidebar({ projects, user }: AppSidebarProps) {
                 {sharedProjects.map((project) => (
                   <SidebarMenuItem key={project.id}>
                     <SidebarMenuButton
-                      type="button"
+                      render={<Link href={`/projects/${project.id}`} />}
                       size="sm"
                       tooltip={project.name}
                     >

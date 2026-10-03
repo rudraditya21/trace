@@ -12,6 +12,7 @@ import {
 import { prisma } from "@/lib/prisma"
 import { requireSession } from "@/lib/session"
 import { ArrowRightIcon } from "lucide-react"
+import Link from "next/link"
 import { connection } from "next/server"
 
 export default async function Home() {
@@ -122,7 +123,11 @@ function ProjectCard({ project, canShare = false }: ProjectCardProps) {
             projectName={project.name}
           />
         )}
-        <Button type="button" size="sm" className="flex-1">
+        <Button
+          render={<Link href={`/projects/${project.id}`} />}
+          size="sm"
+          className="flex-1"
+        >
           Open project
           <ArrowRightIcon data-icon="inline-end" aria-hidden="true" />
         </Button>
